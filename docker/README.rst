@@ -38,6 +38,15 @@ then you can use the `monitor.sh` script.
 
     ./monitor.sh
 
+In case you are testing against a specific architecture, then you must specify
+this also here as an argument:
+
+.. code:: bash
+
+    ./monitor.sh x86_64
+
+* Supported arguments are: `x86_64`, `i586`, `i686`, `noarch`.
+
 Last but not least, some kind of parsing can be achieved via `parser.sh`.
 
 .. code:: bash

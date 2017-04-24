@@ -4,7 +4,28 @@
 LIST_FAIL="./fail.list"
 LIST_PASS="./pass.list"
 LIST_SKIP="./skip.list"
-PACKAGES="packages.txt"
+
+# Accepted options: x86_64, i586, i686, noarch
+ARCH=$1
+
+if [ -z "$ARCH" ]; then
+    PACKAGES="packages.txt"
+else
+    if [ "$ARCH" = "x86_64" ]; then
+        PACKAGES="packages.txt.x86_64"
+    elif [ "$ARCH" = "i586" ]; then
+        PACKAGES="packages.txt.i586"
+    elif [ "$ARCH" = "i686" ]; then
+        PACKAGES="packages.txt.i686"
+    elif [ "$ARCH" = "noarch" ]; then
+        PACKAGES="packages.txt.noarch"
+    else
+        echo "Error: $ARCH is not a valid argument."
+        echo "Valid arguments are: x86_64, i586, i686, noarch"
+        exit 1
+    fi
+fi
+
 TOTAL=$(wc -l < "$PACKAGES")
 
 # Initiliaze
