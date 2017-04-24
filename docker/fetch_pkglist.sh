@@ -27,8 +27,6 @@ else
         docker rm "$cont" &> /dev/null
     fi
 fi
-#echo "$cont" > "$PACKAGES"
-#perl -MTerm::ANSIColor=colorstrip -ne 'print colorstrip($_)' < "$PACKAGES"
 
 # Assuming that the packges start after the line '--+-', remove the previous
 awk '/--+-/{i++}i' $PACKAGES > $PACKAGES_TMP
@@ -37,7 +35,7 @@ mv $PACKAGES_TMP $PACKAGES
 # Remove the '--+-' line (which is the first one)
 tail -n +2 "$PACKAGES" > $PACKAGES_TMP
 
-# packagenames
+# packagenames (remove the whitespace in the end)
 (awk -F '  | ' '{ print $3 }' < $PACKAGES_TMP) | sed 's/[[:blank:]]*$//' > $PKG_NAME
 (awk -F '|' '{ print $4 }' < $PACKAGES_TMP) | sed 's/^.//' | sed 's/[[:blank:]]*$//' > $PKG_VERSION
 (awk -F '|' '{ print $5 }' < $PACKAGES_TMP) | sed 's/^.//' | sed 's/[[:blank:]]*$//' > $PKG_ARCH
@@ -55,6 +53,6 @@ do
     COUNTER=$(echo "$COUNTER + 1" | bc)
 done
 
-# Remove the whitespace at the end of the file
+# Double-Remove the whitespace at the end of the file
 sed 's/[[:blank:]]*$//' $PACKAGES > $PACKAGES_TMP
 mv $PACKAGES_TMP $PACKAGES
