@@ -56,3 +56,9 @@ done
 # Double-Remove the whitespace at the end of the file
 sed 's/[[:blank:]]*$//' $PACKAGES > $PACKAGES_TMP
 mv $PACKAGES_TMP $PACKAGES
+
+# Categorize them based on architecture
+grep .x86_64 "$PACKAGES" > "$PACKAGES.x86_64"
+grep .i586 "$PACKAGES" > "$PACKAGES.i586"
+grep .i686 "$PACKAGES" > "$PACKAGES.i686"
+grep .noarch "$PACKAGES" > "$PACKAGES.noarch"

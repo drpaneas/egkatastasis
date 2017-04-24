@@ -22,6 +22,15 @@ by running the `test_all_parallel.sh` script.
 
     ./test_all_parallel.sh
 
+If you like to test packages against specific architectures (by default all
+architectures are tests) you can provide the architecture type as argument:
+
+.. code:: bash
+
+    ./test_all_parallel.sh x86_64
+
+* Supported arguments are: `x86_64`, `i586`, `i686`, `noarch`.
+
 In case you would like to monitor the current status while the test is running,
 then you can use the `monitor.sh` script.
 
