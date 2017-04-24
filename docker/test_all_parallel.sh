@@ -1,6 +1,5 @@
 #!/bin/bash
-# Usage: ./test_all.sh
-# Example: ./test_all.sh
+# Usage: ./test_all_parallel.sh
 
 # Colors
 bold=$(tput bold)
@@ -14,16 +13,10 @@ COUNTER=$(wc -l < $PACKAGES)
 
 echo -e "${bold}\nScenario${normal}"
 echo "--------"
-echo "We will spawn $COUNTER contrainers (one container per package). For each container we will add the maintenance"
-echo -e "testing repository ${yellow}hehehe${NC}"
-echo "and then we will do a zypper refresh. Finally, we will use zypper to install ONLY ONE package"
-echo "PER container. This is because each one of those should be able to be installed without any"
-echo "problems."
-#    echo -e "\nTest: zypper ar -f $REPO incident_repo && \ "
-#    echo "      zypper ref && \ "
-#    echo "      zypper -n in --from incident_repo -y -l $PKG"
-
+echo -e "We are going to test the scenario where ${yellow}every package${NC} that we ship in TW should"
+echo -e "be able to be installed in a minimal ${yellow}clean system${NC} without any problems. For"
+echo -e "this reason we will spawn ${yellow}$COUNTER contrainers${NC} (one container per package)."
 echo -e "\n${bold}RESULTS${normal}"
 echo "-------"
-
+exit 0
 time parallel --no-notice -j30 "./testit.sh \"{}\"" < $PACKAGES

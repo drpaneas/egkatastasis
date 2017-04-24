@@ -12,7 +12,10 @@ NC='\033[0m' # No Color
 
 # Variables
 PACKAGE="$1"
-TIMEOUT=240s
+TIMEOUT=60s # 1 minute
+LIST_PASS="pass.list"
+LIST_FAIL="fail.list"
+LIST_SKIP="skip.list"
 
 # Spawn then container and run the installation of the pkg uzing zypper
 # Then pass the exit code from the container back to the host operating system
@@ -21,16 +24,23 @@ code=$(timeout $TIMEOUT docker wait "$cont")
 
 # Interpret the result of the installation by controlling the exit code
 if [ -z "$code" ]; then
-    echo -e "TIMEOUT on $PACKAGE"
+    docker logs "$cont" &> "$PACKAGE.log"
+    echo -e "${RED}TIMEOUT${NC} on ${YELLOW}$PACKAGE${NC} ${BLUE}[${NC}see logs at ${RED}$PACKAGE.log${NC}${BLUE}]${NC}"
+    echo "TIMEOUT on $PACKAGE"  >> "$PACKAGE.log"
+    echo "$PACKAGE" >> "$LIST_SKIP"
+    # Kill the container forcefully
     docker kill "$cont" &> /dev/null
-    docker logs "$cont" 2>&1
 else
     if [ "$code" != "0" ]; then
+        docker logs "$cont" &> "$PACKAGE.log"
         echo -e "${RED}FAILURE${NC} on ${YELLOW}$PACKAGE${NC} ${BLUE}[${NC}see logs at ${RED}$PACKAGE.log${NC}${BLUE}]${NC}"
-        docker logs "$cont" &> "$PACKAGE.log"
+        echo "FAILURE on $PACKAGE" >> "$PACKAGE.log"
+        echo "$PACKAGE" >> "$LIST_FAIL"
     else
-        echo -e "${GREEN}SUCCESS${NC} on ${YELLOW}$PACKAGE${NC} ${BLUE}[${NC}see logs at ${GREEN}$PACKAGE.log${NC}${BLUE}]${NC}"
         docker logs "$cont" &> "$PACKAGE.log"
+        echo -e "${GREEN}SUCCESS${NC} on ${YELLOW}$PACKAGE${NC} ${BLUE}[${NC}see logs at ${GREEN}$PACKAGE.log${NC}${BLUE}]${NC}"
+        echo "SUCCESS on $PACKAGE" >> "$PACKAGE.log"
+        echo "$PACKAGE" >> "$LIST_PASS"
     fi
 fi
 
