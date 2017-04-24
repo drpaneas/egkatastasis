@@ -7,18 +7,31 @@ First of all you need to `pull` the Tumbleweed docker images.
 
     docker pull opensuse:tumbleweed
 
-Then build your own on top of it, using this Dockerfile:
+Then you need to create a file called `packages.txt` which will consist of the
+packages you would like to test. This file can be automatically generated using
+the `fetch_pkglist.sh` script.
 
 .. code:: bash
 
-    FROM opensuse:tumbleweed
-    MAINTAINER drpaneas <pgeorgiadis@suse.com>
+    ./fetch_pkglist.sh
 
-    ENTRYPOINT ["/bin/bash", "-c"]
+As soon as the `packages.txt` has been populated, then you can start your test
+by running the `test_all_parallel.sh` script.
 
-    # You have to pass the $PKG as an env variable to the the container
-    CMD ["zypper -n in -y -l $PKG"]
+.. code:: bash
 
-The build the Docker image:
+    ./test_all_parallel.sh
 
+In case you would like to monitor the current status while the test is running,
+then you can use the `monitor.sh` script.
+
+.. code:: bash
+
+    ./monitor.sh
+
+Last but not least, some kind of parsing can be achieved via `parser.sh`.
+
+.. code:: bash
+
+    ./parser.sh
 
