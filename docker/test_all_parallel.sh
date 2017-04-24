@@ -9,6 +9,14 @@ NC='\033[0m' # No Color
 
 # Define variables
 PACKAGES="packages.txt"
+
+# Exit if packages.txt is not generated
+if [ ! -f $PACKAGES ]; then
+    echo "Error: $PACKAGES not found."
+    echo "Run './test_all_parallel.sh' to generate it!"
+    exit 1
+fi
+
 COUNTER=$(wc -l < $PACKAGES)
 
 echo -e "${bold}\nScenario${normal}"
