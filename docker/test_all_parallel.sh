@@ -29,11 +29,6 @@ else
     fi
 fi
 
-echo "$PACKAGES"
-
-# Define variables
-PACKAGES="packages.txt"
-
 # Exit if packages.txt is not generated
 if [ ! -f $PACKAGES ]; then
     echo "Error: $PACKAGES not found."
@@ -50,5 +45,4 @@ echo -e "be able to be installed in a minimal ${yellow}clean system${NC} without
 echo -e "this reason we will spawn ${yellow}$COUNTER contrainers${NC} (one container per package)."
 echo -e "\n${bold}RESULTS${normal}"
 echo "-------"
-exit 0
 time parallel --no-notice -j30 "./testit.sh \"{}\"" < $PACKAGES

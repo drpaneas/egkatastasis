@@ -12,7 +12,7 @@ NC='\033[0m' # No Color
 
 # Variables
 PACKAGE="$1"
-TIMEOUT=60s # 1 minute
+TIMEOUT=900s # 15 minutes
 LIST_PASS="pass.list"
 LIST_FAIL="fail.list"
 LIST_SKIP="skip.list"
