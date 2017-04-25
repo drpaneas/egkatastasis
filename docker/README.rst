@@ -53,3 +53,13 @@ Last but not least, some kind of parsing can be achieved via `parser.sh`.
 
     ./parser.sh
 
+
+Rerun
+#####
+
+Delete the `.log` and `list.` files
+
+.. code:: bash
+
+    rm *.list
+    rm *.log
