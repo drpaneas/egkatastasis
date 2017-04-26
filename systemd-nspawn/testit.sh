@@ -16,17 +16,17 @@ LIST_FAIL="fail.list"
 LIST_SKIP="skip.list"
 
 # Spawn the container as systemd service
-container_name=$(echo "$PACKAGE" |  sed -r 's/[-]+/_/g')
+container_name=$(date +%N%T |  sed -r 's/[:]+/_/g')
 systemctl start tw@$container_name
 
 # Wait for the container to establish Internet connection
 until [[ "`machinectl status $container_name | grep 'wickedd.service'`" == *"wickedd.service"* ]]; do sleep 0.1; done
 
 # Run the test
-cont=$( { systemd-run --wait --machine $container_name --setenv PKG="$PACKAGE" /bin/sh -c '/usr/bin/zypper -n in -y -l $PKG' | echo > outfile; } 2>&1 )
+cont=$( { systemd-run --wait --machine $container_name --setenv PKG="$PACKAGE" /bin/sh -c '/usr/bin/zypper -n in -y -l $PKG' | echo > /dev/null; } 2>&1 )
 
 # Wait until the test is finished
-until [ "`grep -o Finished <<< $cont`" == "Finished" ]; do echo $cont && sleep 0.1; done
+until [ "`grep -o Finished <<< $cont`" == "Finished" ]; do sleep 0.1; done
 
 # Parse the result
 unit_file=$(echo $cont | grep -o -P '(?<=unit: ).*(?=Finished)' | sed 's/[[:blank:]]*$//')
