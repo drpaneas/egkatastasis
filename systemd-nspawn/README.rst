@@ -62,19 +62,16 @@ Login back again, and fix the problem with the `timezone`:
     timedatectl set-timezone Europe/Berlin
     sed -i '/en_US.UTF-8/c\RC_LANG=""' /etc/sysconfig/language
 
-Last but not least, enable `ssh` or any other service you might want:
+
+Workaround for krb5-mini
+########################
+
+In case you are hit by `#2` then do the following as a workaround for systemd:
 
 .. code:: bash
 
-    systemctl enable sshd
-    systemctl start sshd
-
-If you like, you can use my `motd - Message Of The Day`:
-
-.. code:: bash
-
-    wget --no-check-certificate https://gitlab.suse.de/pgeorgiadis/TaaS/raw/master/motd.sh -O /etc/motd.sh
-    bash /etc/motd.sh
+    zypper in krb5
+    zypper rm krb5-mini
 
 Spawn ephemeral containers
 ##########################
