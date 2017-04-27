@@ -5,6 +5,8 @@ Utilizing the power and the speed of containers, the system spawns as many conta
 in Tumbleweed and tries to install them. The testing scenario is that each package should be able to be installed
 in a clean Tumbleweed system.
 
+.. image:: images/image_1.jpg
+
 So far, there are two implementations:
 
 * systemd-nspawn
