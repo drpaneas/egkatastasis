@@ -44,5 +44,9 @@ else
     fi
 fi
 
+# Write at the beginning of the file the '$PKG' keyword as requirement
+# for parsing the logs using filebeat's multiline plugin
+sed -i '1i$PKG' "$PACKAGE.log" 
+
 # Remove the container from the system
 docker rm "$cont" &> /dev/null 

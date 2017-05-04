@@ -1,0 +1,12 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /logs/*.log
+  multiline:
+    pattern: '$PKG'
+    negate: true
+    match: after
+
+output.logstash:
+  hosts: ["logstash:5044"]
+  template.enabled: false
