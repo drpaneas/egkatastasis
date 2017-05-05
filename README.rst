@@ -21,3 +21,56 @@ The target goal is to catch installation problems for the already released packa
 
 In the process of building this, my personal goal is to learn about containers
 and their possibilities.
+
+Docker
+######
+
+Look for the `README` into the `Docker` folder.
+
+
+systemd-nspawn
+##############
+
+Look for the `README` into the `systemd-nspawn` folder.
+
+
+ELK Stack
+#########
+
+
+Start ElasticSearch:
+
+.. code:: bash
+
+    sudo docker run -d -p 9200:9200 -p 9300:9300 -it -h elasticsearch --name elasticsearch elasticsearch
+
+Start Kibana:
+
+.. code:: bash
+
+    sudo docker run -d -p 5601:5601 -h kibana --name kibana --link elasticsearch:elasticsearch kibana
+
+Then start testing and generate some logs using either the Docker or the
+systemd-nspawn container. As soon as you have initiated the testing process
+you can now start `logstash`:
+
+Logstash:
+
+.. code:: bash
+
+    sudo docker run -h logstash --name logstash --link elasticsearch:elasticsearch -it --rm -v "$PWD":/config-dir -v "$PWD/docker":/logs logstash -f /config-dir/logstash.conf
+
+Once the logstash has been started, it's time to fire up `Filebeat`:
+
+.. code:: bash
+
+    sudo docker run -h filebeat --name filebeat --link logstash:logstash -it --rm -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/docker":/logs prima/filebeat:latest
+
+To monitor the test via `Kibana`, open it in your browser and select:
+
+.. code:: bash
+
+    Index name or pattern: filebeat-*
+     Time-field name: @timestamp
+
+

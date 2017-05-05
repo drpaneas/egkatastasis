@@ -7,6 +7,12 @@ First of all you need to `pull` the Tumbleweed docker images.
 
     docker pull opensuse:tumbleweed
 
+Secondly, you need to install `GNU Parallel` software:
+
+.. code:: bash
+
+    # zypper -n in gnu_parallel
+
 Then you need to create a file called `packages.txt` which will consist of the
 packages you would like to test. This file can be automatically generated using
 the `fetch_pkglist.sh` script.
