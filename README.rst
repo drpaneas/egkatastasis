@@ -37,6 +37,18 @@ Look for the `README` into the `systemd-nspawn` folder.
 ELK Stack
 #########
 
+First all clone the project:
+
+.. code:: bash
+
+    git clone https://github.com/drpaneas/egkatastasis
+
+Then change directory into `egkatastasis` root folder:
+
+.. code:: bash
+
+    cd egkatastasis/
+   
 
 Start ElasticSearch:
 
@@ -52,7 +64,9 @@ Start Kibana:
 
 Then start testing and generate some logs using either the Docker or the
 systemd-nspawn container. As soon as you have initiated the testing process
-you can now start `logstash`:
+you can now start `logstash`. In the following examples, we are taking as
+granted the fact that the logs are stored locally in either `./egkatastasis/docker/logs/`
+or in `./egkatastasis/systemd-nspawn/logs/` directory.
 
 Logstash:
 
@@ -64,13 +78,13 @@ Once the logstash has been started, it's time to fire up `Filebeat`:
 
 .. code:: bash
 
+    sudo chown root filebeat.yml
     sudo docker run -h filebeat --name filebeat --link logstash:logstash -it --rm -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/docker":/logs prima/filebeat:latest
 
-To monitor the test via `Kibana`, open it in your browser and select:
+To monitor the test via `Kibana`, open your browser at `http://localhost:5601` and select:
 
 .. code:: bash
 
     Index name or pattern: filebeat-*
      Time-field name: @timestamp
-
-
+     
