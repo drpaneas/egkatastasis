@@ -36,7 +36,7 @@ mv $PACKAGES_TMP $PACKAGES
 tail -n +2 "$PACKAGES" > $PACKAGES_TMP
 
 # packagenames (remove the whitespace in the end)
-(awk -F '  | ' '{ print $3 }' < $PACKAGES_TMP) | sed 's/[[:blank:]]*$//' > $PKG_NAME
+(awk -F '|' '{ print $2 }' < $PACKAGES_TMP) | sed 's/[[:space:]]//g' > $PKG_NAME
 (awk -F '|' '{ print $4 }' < $PACKAGES_TMP) | sed 's/^.//' | sed 's/[[:blank:]]*$//' > $PKG_VERSION
 (awk -F '|' '{ print $5 }' < $PACKAGES_TMP) | sed 's/^.//' | sed 's/[[:blank:]]*$//' > $PKG_ARCH
 
