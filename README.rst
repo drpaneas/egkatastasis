@@ -84,7 +84,7 @@ For **Docker**:
 
     sudo docker run -d -h logstash --name logstash --link elasticsearch:elasticsearch -v "$PWD":/config-dir -v "$PWD/docker":/logs logstash -f /config-dir/logstash.conf
 
-Start`Filebeat`:
+Start `Filebeat`:
 
 Before you start Filebeat just make sure that *logstash* has already been running. Then depending on which method you have chosen (Docker or nspawn) run the following commands:
 
@@ -118,6 +118,13 @@ logs to `logstash`. To make sure about it:
 
 .. code:: bash
 
-    sudo docker exec logstash ls -l /logs/logs/
+    sudo docker exec logstash ls -l /logs/ | grep '.log'
     
-If this command is not returning something, that means that the logs were never sent to logstash.
+If this command is not returning something, that means that the logs were never sent to logstash. So, the
+next step from troubleshooting perspective would be to see if `filebeat` received any logs:
+
+.. code:: bash
+
+    sudo docker exec filebeat ls -l /logs | grep '.log'
+
+This should let you know if Filebeat is getting the logs
