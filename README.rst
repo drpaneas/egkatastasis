@@ -76,10 +76,20 @@ Logstash:
 
 Once the logstash has been started, it's time to fire up `Filebeat`:
 
+For **Docker**:
+
 .. code:: bash
 
     sudo chown root filebeat.yml
     sudo docker run -h filebeat --name filebeat --link logstash:logstash -it --rm -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/docker":/logs prima/filebeat:latest
+
+For **systemd-nspawn**:
+
+.. code:: bash
+
+    sudo chown root filebeat.yml
+    sudo docker run -h filebeat --name filebeat --link logstash:logstash -it --rm -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/systemd-nspawn":/logs prima/filebeat:latest
+
 
 To monitor the test via `Kibana`, open your browser at `http://localhost:5601` and select:
 
