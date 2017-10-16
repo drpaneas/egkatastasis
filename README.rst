@@ -37,7 +37,7 @@ Look for the `README` into the `systemd-nspawn` folder.
 ELK Stack
 #########
 
-First all clone the project:
+First of all clone the project:
 
 .. code:: bash
 
@@ -65,14 +65,14 @@ Start Kibana:
 Then start testing and generate some logs using either the Docker or the
 systemd-nspawn container. As soon as you have initiated the testing process
 you can now start `logstash`. In the following examples, we are taking as
-granted the fact that the logs are stored locally in either `./egkatastasis/docker/logs/`
-or in `./egkatastasis/systemd-nspawn/logs/` directory.
+granted the fact that the logs are stored locally in either ` ./egkatastasis/docker/logs/ `
+or in ` ./egkatastasis/systemd-nspawn/logs/ ` directory.
 
 Logstash:
 
 .. code:: bash
 
-    sudo docker run -h logstash --name logstash --link elasticsearch:elasticsearch -it --rm -v "$PWD":/config-dir -v "$PWD/docker":/logs logstash -f /config-dir/logstash.conf
+    sudo docker run -d -h logstash --name logstash --link elasticsearch:elasticsearch -v "$PWD":/config-dir -v "$PWD/docker":/logs logstash -f /config-dir/logstash.conf
 
 Once the logstash has been started, it's time to fire up `Filebeat`:
 
@@ -88,7 +88,7 @@ For **systemd-nspawn**:
 .. code:: bash
 
     sudo chown root filebeat.yml
-    sudo docker run -h filebeat --name filebeat --link logstash:logstash -it --rm -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/systemd-nspawn":/logs prima/filebeat:latest
+    sudo docker run -d -h filebeat --name filebeat --link logstash:logstash -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/docker":/logs prima/filebeat:latest
 
 
 To monitor the test via `Kibana`, open your browser at `http://localhost:5601` and select:
