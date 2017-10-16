@@ -65,31 +65,46 @@ Start Kibana:
 Then start testing and generate some logs using either the Docker or the
 systemd-nspawn container. As soon as you have initiated the testing process
 you can now start `logstash`. In the following examples, we are taking as
-granted the fact that the logs are stored locally in either ` ./egkatastasis/docker/logs/ `
-or in ` ./egkatastasis/systemd-nspawn/logs/ ` directory.
+granted the fact that the logs are stored locally in either `./egkatastasis/docker/` for *Docker*
+or in `./egkatastasis/systemd-nspawn/` directory for *systemd-nspawn*.
 
-Logstash:
+Start Logstash:
+
+Depending on which method you have chosen (Docker or SystemD) run the following commands:
+
+For **systemd-nspawn**:
+
+.. code:: bash
+
+    sudo docker run -d -p 5044:5044 -h logstash --name logstash --link elasticsearch:elasticsearch -v "$PWD":/config-dir -v "$PWD/systemd-nspawn":/logs logstash -f /config-dir/logstash.conf
+    
+For **Docker**:
 
 .. code:: bash
 
     sudo docker run -d -h logstash --name logstash --link elasticsearch:elasticsearch -v "$PWD":/config-dir -v "$PWD/docker":/logs logstash -f /config-dir/logstash.conf
 
-Once the logstash has been started, it's time to fire up `Filebeat`:
+Start`Filebeat`:
 
-For **Docker**:
-
-.. code:: bash
-
-    sudo chown root filebeat.yml
-    sudo docker run -h filebeat --name filebeat --link logstash:logstash -it --rm -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/docker":/logs prima/filebeat:latest
+Before you start Filebeat just make sure that *logstash* has already been running. Then depending on which method you have chosen (Docker or nspawn) run the following commands:
 
 For **systemd-nspawn**:
 
 .. code:: bash
 
     sudo chown root filebeat.yml
+    sudo docker run -d -h filebeat --name filebeat --link logstash:logstash -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/systemd-nspawn":/logs prima/filebeat:latest
+
+For **Docker**:
+
+.. code:: bash
+
+    sudo chown root filebeat.yml
     sudo docker run -d -h filebeat --name filebeat --link logstash:logstash -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/docker":/logs prima/filebeat:latest
 
+What's happening behind the scenes is that Filebeat is monitoring the *directory* for files that have `*.log`
+as their suffix. As soon it finds one of those, it sends it to `logstash` container at TCP 5044. Then
+`logstash` sends these to `elasticsearch` and you can view them using `kibana`.
 
 To monitor the test via `Kibana`, open your browser at `http://localhost:5601` and select:
 
@@ -98,3 +113,11 @@ To monitor the test via `Kibana`, open your browser at `http://localhost:5601` a
     Index name or pattern: filebeat-*
      Time-field name: @timestamp
      
+In case you don't see any logs there, there might be a good indication that `filebeat` is not sending the
+logs to `logstash`. To make sure about it:
+
+.. code:: bash
+
+    sudo docker exec logstash ls -l /logs/logs/
+    
+If this command is not returning something, that means that the logs were never sent to logstash.
