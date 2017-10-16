@@ -112,7 +112,24 @@ To monitor the test via `Kibana`, open your browser at `http://localhost:5601` a
 
     Index name or pattern: filebeat-*
      Time-field name: @timestamp
-     
+
+Then you can click at **Discover** and from the **Selected Field** add the tag **source**.
+In the search field, you can search for stuff like:
+
+.. code:: bash
+
+    "SUCCESS on" AND "scriptlet failed"
+    "SUCCESS on" AND "Command exited with status 126"
+    "SUCCESS on" AND "no alternatives for"
+    "SUCCESS on" AND "wrong permissions"
+    "SUCCESS on" AND "cannot verify"
+    
+    # or also for the failed ones:
+    "FAILURE on"
+
+Troubleshooting
+===============
+
 In case you don't see any logs there, there might be a good indication that `filebeat` is not sending the
 logs to `logstash`. To make sure about it:
 
