@@ -1,0 +1,56 @@
+version: '3.3'
+services:
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+        container_name: elasticsearch
+        hostname: elasticsearch
+        environment:
+            ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+        volumes:
+            - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        ports:
+            - 9200:9200
+            - 9300:9300
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:5.6.3
+        container_name: kibana
+        hostname: kibana
+        volumes:
+            - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+        ports:
+            - 5601:5601
+        links:
+            - elasticsearch
+        depends_on:
+            - elasticsearch
+
+    logstash:
+        image: docker.elastic.co/logstash/logstash:5.6.3 
+        container_name: logstash
+        hostname: logstash
+        volumes:
+            - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+            - ./logstash.yml:/usr/share/logstash/config/logstash.yml
+            - ./docker:/logs
+        ports:
+            - 5044:5044
+        links:
+            - elasticsearch
+        depends_on:
+            - elasticsearch
+            - kibana
+
+    filebeat:
+        image: prima/filebeat:latest
+        container_name: filebeat
+        hostname: filebeat
+        volumes:
+            - ./filebeat.yml:/filebeat.yml
+            - ./docker:/logs
+        links:
+            - logstash
+        depends_on:
+            - elasticsearch
+            - kibana
+            - logstash
