@@ -1,9 +1,9 @@
-# Egkatastasis
+# Egkatastasis - openSUSE container image testing
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1580/badge)](https://bestpractices.coreinfrastructure.org/projects/1580)
 
 
-<img src="https://github.com/drpaneas/egkatastasis/blob/master/images/egkatastasis_logo.png" width="100">
+<img src="https://github.com/drpaneas/egkatastasis/blob/master/images/egkatastasis_horizontal.png">
 
 ----
 
