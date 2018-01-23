@@ -37,7 +37,7 @@ Absolutely nothing. This is the benefit of Docker ecosystem and tooling.
 
 **Note**: `systemd >= 232` version is a hard requirement!
 
-Create a `BTRFS subvolume` called `test_tw` using the opensuse:tumbleweed
+Create a `BTRFS subvolume` called `test_tw` using the `opensuse:tumbleweed`
 image:
 
 ```bash
