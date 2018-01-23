@@ -284,69 +284,18 @@ Then change directory into `egkatastasis` root folder:
     cd egkatastasis/
 ```
 
-Start ElasticSearch:
+Deploy the *ELK Stack* and *Filebeat* using `docker-compose`. Depending on which method you have chosen (*Docker* or *systemd-nspawn*) run the following commands:
 
 ```bash
-    sudo docker run -d -p 9200:9200 -p 9300:9300 -it -h elasticsearch --name elasticsearch elasticsearch
+docker-compose -f setup_elk_docker.yml up
+docker-compose -f setup_elk_systemd.yml up
 ```
 
-Start Kibana:
-
-```bash
-    sudo docker run -d -p 5601:5601 -h kibana --name kibana --link elasticsearch:elasticsearch kibana
-```
-
-Then start testing and generate some logs using either the Docker or the
-systemd-nspawn container. As soon as you have initiated the testing process
-you can now start `logstash`. In the following examples, we are taking as
-granted the fact that the logs are stored locally in either `./egkatastasis/docker/` for *Docker*
-or in `./egkatastasis/systemd-nspawn/` directory for *systemd-nspawn*.
-
-Start Logstash:
-
-Depending on which method you have chosen (Docker or SystemD) run the following commands:
-
-For **systemd-nspawn**:
-
-```bash
-
-    sudo docker run -d -p 5044:5044 -h logstash --name logstash --link elasticsearch:elasticsearch -v "$PWD":/config-dir -v "$PWD/systemd-nspawn":/logs logstash -f /config-dir/logstash.conf
-```
-
-For **Docker**:
-
-```bash
-    sudo docker run -d -h logstash --name logstash --link elasticsearch:elasticsearch -v "$PWD":/config-dir -v "$PWD/docker":/logs logstash -f /config-dir/logstash.conf
-```
-
-Start `Filebeat`:
-
-Before you start Filebeat just make sure that *logstash* has already been running. Then depending on which method you have chosen (Docker or nspawn) run the following commands:
-
-For **systemd-nspawn**:
-
-```bash
-
-    sudo chown root filebeat.yml
-    sudo docker run -d -h filebeat --name filebeat --link logstash:logstash -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/systemd-nspawn":/logs prima/filebeat:latest
-```
-
-For **Docker**:
-
-```bash
-
-    sudo chown root filebeat.yml
-    sudo docker run -d -h filebeat --name filebeat --link logstash:logstash -v "$PWD"/filebeat.yml:/filebeat.yml -v "$PWD/docker":/logs prima/filebeat:latest
-```
-
-What's happening behind the scenes is that Filebeat is monitoring the *directory* for files that have `*.log`
-as their suffix. As soon it finds one of those, it sends it to `logstash` container at TCP 5044. Then
-`logstash` sends these to `elasticsearch` and you can view them using `kibana`.
+#### Monitor
 
 To monitor the test via `Kibana`, open your browser at `http://localhost:5601` and select:
 
 ```bash
-
     Index name or pattern: filebeat-*
      Time-field name: @timestamp
 ```
