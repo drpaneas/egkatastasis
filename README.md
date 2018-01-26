@@ -33,7 +33,7 @@ If you want to test a single package using Egkatastasis right away,
 
 ```bash
 $ git clone https://github.com/drpaneas/egkatastasis
-$ cd ./docker
+$ cd ./egkatastasis/docker
 $ pkg='vim'             # define the package under test
 $ ./testit.sh ${pkg}    # run the test
 $ cat ${pkg}.log        # see the logs
