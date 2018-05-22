@@ -1,7 +1,7 @@
 #!/bin/bash
 # Usage: ./testit.sh $PACKAGE
 # Example: ./testit.sh converseen-lang-0.9.6.1-1.2
-# The script runs this command: docker run -i -t --rm --env PKG="converseen-lang-0.9.6.1-1.2" opensuse:tumbleweed /bin/bash -c '/usr/bin/zypper -n in -y -l $PKG'
+# The script runs this command: docker run -i -t --rm --env PKG="converseen-lang-0.9.6.1-1.2" opensuse/tumbleweed:latest /bin/bash -c '/usr/bin/zypper -n in -y -l $PKG'
 
 # Colors for the output
 RED='\033[0;31m'
@@ -19,7 +19,7 @@ LIST_SKIP="skip.list"
 
 # Spawn then container and run the installation of the pkg uzing zypper
 # Then pass the exit code from the container back to the host operating system
-cont=$(docker run -d --env PKG="$PACKAGE" --net=host opensuse:tumbleweed /bin/bash -c '/usr/bin/zypper -n in -y -l $PKG')
+cont=$(docker run -d --env PKG="$PACKAGE" --net=host opensuse/tumbleweed:latest /bin/bash -c '/usr/bin/zypper -n in -y -l $PKG')
 code=$(timeout $TIMEOUT docker wait "$cont")
 
 # Interpret the result of the installation by controlling the exit code
@@ -46,7 +46,7 @@ fi
 
 # Write at the beginning of the file the '$PKG' keyword as requirement
 # for parsing the logs using filebeat's multiline plugin
-sed -i '1i$PKG' "$PACKAGE.log" 
+sed -i '1i$PKG' "$PACKAGE.log"
 
 # Remove the container from the system
-docker rm "$cont" &> /dev/null 
+docker rm "$cont" &> /dev/null

@@ -8,7 +8,7 @@ PKG_VERSION="package.version"
 PKG_ARCH="package.arch"
 TIMEOUT=240s
 
-cont=$(docker run -d --net=host opensuse:tumbleweed /bin/bash -c '/usr/bin/zypper se -st package "*"')
+cont=$(docker run -d --net=host opensuse/tumbleweed:latest /bin/bash -c '/usr/bin/zypper se -st package "*"')
 code=$(timeout $TIMEOUT docker wait "$cont")
 if [ -z "$code" ]; then
     echo -e "TIMEOUT: Zypper takes too long!"

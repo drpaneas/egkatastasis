@@ -5,7 +5,7 @@ First of all you need to `pull` the Tumbleweed docker images.
 
 .. code:: bash
 
-    docker pull opensuse:tumbleweed
+    docker pull opensuse/tumbleweed:latest
 
 Secondly, you need to install `GNU Parallel` software:
 
