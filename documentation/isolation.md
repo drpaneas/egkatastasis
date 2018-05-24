@@ -3,7 +3,7 @@
 * Virtual Machines
 
 		Give us great isolation, terrible overhead and they are not so easy to interact with
-		scripting. I mean you can do it, but it's not super fan.
+		scripting. I mean you can do it, but it's not super fun.
 
 * Chroots
 
